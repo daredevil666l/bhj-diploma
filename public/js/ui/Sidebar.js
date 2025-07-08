@@ -4,21 +4,23 @@
  * и за кнопки меню
  * */
 class Sidebar {
-  /**
-   * Запускает initAuthLinks и initToggleButton
-   * */
+
   static init() {
     this.initAuthLinks();
     this.initToggleButton();
   }
 
-  /**
-   * Отвечает за скрытие/показа боковой колонки:
-   * переключает два класса для body: sidebar-open и sidebar-collapse
-   * при нажатии на кнопку .sidebar-toggle
-   * */
   static initToggleButton() {
+    const toggleButton = document.querySelector('.sidebar-toggle')
+    const body = document.querySelector('.sidebar-mini');
 
+    toggleButton.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      ['sidebar-open', 'sidebar-collapse'].forEach(className => {
+        body.classList.toggle(className);
+      });
+    })
   }
 
   /**
@@ -29,6 +31,25 @@ class Sidebar {
    * выходу устанавливает App.setState( 'init' )
    * */
   static initAuthLinks() {
+
+    document.querySelector('.menu-item_register').addEventListener('click', (e) => {
+      e.preventDefault();
+      App.getModal('register').open();
+    });
+
+    document.querySelector('.menu-item_login').addEventListener('click', (e) => {
+      e.preventDefault();
+      App.getModal('login').open();
+    });
+
+    document.querySelector('.menu-item_logout').addEventListener('click', (e) => {
+      e.preventDefault();
+      User.logout((err, response) => {
+        if (response && response.success) {
+          App.setState('init');
+        }
+      });
+    });
 
   }
 }
